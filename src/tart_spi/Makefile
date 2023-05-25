@@ -120,7 +120,7 @@ SIM=${DIR}/bench
 COMMON_FILES=${RTL}/tart.v ${RTL}/tart_dual_dcm.v ${RTL}/tart_wishbone.v ${RTL}/tart_control.v ${RTL}/SDRAM_Controller_v.v ${LIB_FILES} ${XIL_FILES} ${WB4_FILES} ${SPI_FILES} ${CAP_FILES} ${ACQ_FILES} ${DSP_FILES}
 
 XFILES=${COMMON_FILES}
-IFILES=${COMMON_FILES} ${SIM}/correlator/tart_dsp_tb.v
+IFILES=${COMMON_FILES} ${SIM}/tart_dsp_tb.v ${SIM}/xilinx/IDDR2.v ${SIM}/xilinx/DSP48A1.v 
 
 # (optional) Name of top module. Defaults to name of first file with suffix removed
 TOP_MODULE=tart
@@ -172,7 +172,7 @@ BITGEN_EXTRAS=
 CPLDFIT_XTRAS=
 HPREP6_EXTRAS=
 
-ICARUS_OPTIONS=
+ICARUS_OPTIONS=-I ./include/
 
 #########################################################
 # User settings end here
