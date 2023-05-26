@@ -95,7 +95,7 @@ module fifo_control
    wire [10:0]         bb_wr_nxt, bb_rd_nxt;
    wire                bb_empty_n, bb_full;
    reg [2:0]           aq_state = `AQ_WAITING;
-
+   wire                cmd_accept;
 
    //-------------------------------------------------------------------------
    //  FIFO signal assignments.
@@ -153,7 +153,7 @@ module fifo_control
    always @(posedge clock_i)
      if (reset_i || !enable_i)
        overflow_o <= #DELAY 1'b0;
-     else if (bb_full && strobe_i && state == `AQ_BUFFERING)
+     else if (bb_full && strobe_i && aq_state == `AQ_BUFFERING)
        overflow_o <= #DELAY 1'b1;
 
 
