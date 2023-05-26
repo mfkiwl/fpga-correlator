@@ -14,7 +14,7 @@
 ##
 ##--------------------------------------------------------------------------##
 
-GOWIN=~/gowin/IDE/bin/GowinSynthesis
+GOWIN_SYNTH=~/gowin/IDE/bin/GowinSynthesis
 SHELL=/bin/bash
 
 standard: build upload
@@ -172,7 +172,7 @@ test:
 
 #########################################################
 
-icarus: clean_test ${GFILES}
+icarus: clean_test ${IFILES}
 	iverilog -D__icarus -Wall -o icarus.out -s ${ICARUS_TOP_MODULE} ${ICARUS_OPTIONS} ${IFILES}
 
 #########################################################
@@ -181,7 +181,7 @@ icarus: clean_test ${GFILES}
 
 
 build: clean_test
-	${GOWIN_SYNTH} -i ${GFILES} -top tart -pn ${TARGET} -dir include/
+	${GOWIN_SYNTH} -i ${GFILES} -top tart -pn ${TARGET} -inc include/
 
 program: clean_test clean_test build
 	. ${X_SETTINGS} ; impact -batch impact_${PART_TYPE}.cmd
