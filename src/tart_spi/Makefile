@@ -179,6 +179,8 @@ icarus: clean_test ${IFILES}
 # Synthesis Follows
 
 
+help:
+	${GOWIN_SYNTH} -h
 
 build: clean_test
 	${GOWIN_SYNTH} -i ${GFILES} -top tart -pn ${TARGET} -inc include/
