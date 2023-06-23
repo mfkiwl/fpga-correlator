@@ -41,8 +41,10 @@ all: dsp
 cor: ${DEP} ${COR} correlator/tart_correlator_tb.v
 	$(IVC) $(OPT) -o $(OUT)/tart.out $(DEP) $(COR) $(SIM) correlator/tart_correlator_tb.v
 
+COUNTER_BITS	?= 12
+
 dsp: ${DEP} ${DSP} tart_dsp_tb.v
-	$(IVC) $(OPT) -s tart_dsp_tb -o $(OUT)/tart.out $(DEP) $(DSP) $(SIM) tart_dsp_tb.v
+	$(IVC) $(OPT) -DCOUNTER_BITS=$(COUNTER_BITS) -s tart_dsp_tb -o $(OUT)/tart.out $(DEP) $(DSP) $(SIM) tart_dsp_tb.v
 
 fak: ${DEP} ${FAK} tart_dsp_tb.v
 	$(IVC) $(OPT) -D__USE_FAKE_DSP -o $(OUT)/tart.out $(DEP) $(FAK) $(SIM) tart_dsp_tb.v

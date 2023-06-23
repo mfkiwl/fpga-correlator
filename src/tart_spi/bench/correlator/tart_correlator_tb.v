@@ -39,6 +39,7 @@
  */
 
 `include "tartcfg.v"
+`define BLOCK_BITS 8
 
 module tart_correlator_tb;
 

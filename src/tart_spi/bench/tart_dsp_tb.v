@@ -38,6 +38,9 @@
  */
 
 `include "tartcfg.v"
+`ifndef COUNTER_BITS
+ `define COUNTER_BITS 12
+`endif
 
 module tart_dsp_tb;
 
@@ -76,11 +79,10 @@ module tart_dsp_tb;
    parameter FSB   = FBITS-1;    // MSB of fetch-counter
    parameter READS = 2;         // Banks of visibilities to read
 
-//    parameter COUNT = 3; // count down from:  (1 << COUNT) - 1;
-//    parameter COUNT = 6; // count down from:  (1 << COUNT) - 1;
-//    parameter COUNT = 8; // count down from:  (1 << COUNT) - 1;
-//    parameter COUNT = 10; // count down from:  (1 << COUNT) - 1;
-   parameter COUNT = 12; // count down from:  (1 << COUNT) - 1;
+   // Number of bits that are used for the samples-counter -- determines how
+   // many samples are used to calculate a block of visibilities
+   // NOTE: can be set via the `COUNTER_BITS` environment variable
+   parameter COUNT = `COUNTER_BITS;
 
 //    parameter NREAD = 4;
 //    parameter NREAD = 48;

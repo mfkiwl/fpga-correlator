@@ -44,6 +44,14 @@ hex:
 floor:
 	runhaskell script/floor.hs --numDSP=4 --prefix="DSP/COR/CXB" --outfile papilio/floor.ucf
 
+## -- Icarus simulation targets
+COUNTER_BITS	?= 12
+.PHONY:	bench sim
+bench:
+	@COUNTER_BITS=$(COUNTER_BITS) make -C bench dsp
+
+sim:	bench
+	@COUNTER_BITS=$(COUNTER_BITS) make -C build run
 
 
 ##--------------------------------------------------------------------------##
