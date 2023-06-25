@@ -195,6 +195,8 @@ module tart_dsp_tb;
    integer      num = 0;
    integer      ptr = 0;
 
+   // integer       fh;
+
    initial begin : SIM_BLOCK
       if (COUNT < 8) begin
          $write("%12t: ", $time);
@@ -229,7 +231,13 @@ module tart_dsp_tb;
          if (RNG) data[ptr] = $random;
          else     data[ptr] = ptr;
       end
-
+/*
+      fh = $fopen("sram.out", "w");
+      for (ptr = 0; ptr < DSIZE; ptr = ptr+1) begin
+        $fwrite(fh, "%06x\n", data[ptr]);
+      end
+      $fclose(fh);
+*/
 
       //----------------------------------------------------------------------
       #20 $display("\n%12t: Issuing RESET.", $time);

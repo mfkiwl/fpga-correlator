@@ -1,0 +1,42 @@
+name:                tartspi
+version:             0.1.0.0
+github:              "tart-telescope/fpga-correlator"
+license:             BSD3
+author:              "Patrick Suggate"
+maintainer:          "patrick.suggate@gmail.com"
+copyright:           "2023 Patrick Suggate"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+synopsis:            Numerical solutions to Burgers equation using coupled spacetime meshes
+category:            Numerical
+description:         Please see the README on GitHub at <https://github.com/psuggate/spacetime-burgers#readme>
+
+ghc-options:
+- -Wall
+
+default-extensions:
+- BlockArguments
+
+dependencies:
+- base
+- bits
+- lens
+- optparse-applicative
+- vector
+
+library:
+  source-dirs: src
+
+executables:
+  synthetic-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - tartspi

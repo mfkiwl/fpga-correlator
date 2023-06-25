@@ -1,13 +1,9 @@
-#!/usr/bin/env runhaskell
-{-# LANGUAGE DeriveFoldable    #-}
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE DeriveTraversable #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeOperators     #-}
+{-# LANGUAGE DeriveFoldable, DeriveFunctor, DeriveTraversable,
+             OverloadedStrings, TypeOperators #-}
 
 ------------------------------------------------------------------------------
 -- |
--- Module      : Main
+-- Module      : Lib
 -- Copyright   : (C) Tim Molteno     2017
 --               (C) Max Scheel      2017
 --               (C) Patrick Suggate 2017
@@ -46,6 +42,7 @@
 --
 -- Changelog:
 --  + 14/06/2017  --  initial file;
+--  + 24/06/2023  --  refactored into a compiled library;
 --
 -- FIXME:
 --
@@ -53,14 +50,31 @@
 --
 ------------------------------------------------------------------------------
 
-module Main where
+module Lib
+  (
+    calc
+  , visb
+  , dump
+
+  , mfsr32
+  , tobits
+  , incr
+  , mask
+
+  , readPermutationVector
+  )
+where
 
 import           Data.Bits
 import           Data.Bool
-import           Data.List          (intercalate, tails)
+import           Data.List                    (intercalate, tails)
 import           Data.Word
-import qualified System.Environment as Sys
 import           Text.Printf
+
+import           Control.Arrow                ((&&&))
+import           Control.Monad.ST             (runST)
+import qualified Data.Vector.Storable         as Vec
+import qualified Data.Vector.Storable.Mutable as Mut
 
 
 -- * Functions to compute the visibilities.
@@ -81,13 +95,27 @@ incr (True :bs) = False:incr bs
 -- | Calculate the visibilies by correlating for `n` samples.
 calc :: Int -> [[Bool]] -> ([[Bool]], [Int])
 calc n bz =
-  let go (a:b:bs) vs = let vs' = visb b a vs in vs':go (b:bs) vs'
-      l  = length $ head bz
-      vs = map (\x -> (x, x)) $ init $ tails $ replicate l 0
-      xs = go bz vs!!pred n
-      ms = mean $ take n $ tail bz
+  let ms = mean $ take n $ tail bz :: [Int]
+
+      vs :: [([Int], [Int])]
+      vs  =
+        let l = length $ head bz
+            f = init . tails . flip replicate 0 :: Int -> [[Int]]
+            d = id &&& id
+        in  d <$> f l
+
+      go :: [[Bool]] -> [([Int], [Int])] -> [[([Int], [Int])]]
+      go (a:b:bs) vz =
+        let vz' = visb b a vz
+        in  vz':go (b:bs) vz'
+      go       _   _ = error $ printf "Lib.calc.go: invalid input (%s)\n" (show bz)
+
+      xs :: [([Int], [Int])]
+      xs  = go bz vs!!pred n
+
       ws = concat $ uncurry zip <$> xs
-      ys = concat $ foldr (\(x,y) zs -> [x,y]:zs) [] ws :: [Int]
+      ys = concat $ foldr (\(x, y) zs -> [x, y]:zs) [] ws :: [Int]
+
   in  (drop n bz, ys ++ ms)
 
 
@@ -119,37 +147,21 @@ mfsr32 w = let tap0 = w .&. 0x02
            in  w `rotateL` 1 `xor` taps
 
 tobits :: Word32 -> [Bool]
-tobits w = let go 32 _ = []
+tobits w = let go :: Int -> Word32 -> [Bool]
+               go 32 _ = []
                go  n x = (x .&. 1 == 1):go (n+1) (x `shiftR` 1)
-           in  go 0 w
+           in  go  0 w
 
-
--- * Generate visibilities from synthetic inputs.
 ------------------------------------------------------------------------------
--- | Compute synthetic visibilities, and with input arguments:
---    `l`  --  number of antennae (or, length of bit-strings);
---    `m`  --  number of mask-bits, for testing subranges of the input;
---    `e`  --  exponent of the number of iterations; and
---    `d`  --  number of initial samples to drop.
---   For example, to duplicate the behaviour of `tart_dsp_tb`, `d = 2`, and
---   `l = 24`.
-main :: IO ()
-main  = do
-  args <- Sys.getArgs
-  let (l:m:e:d:_) = read <$> args
-      cz = drop d $ map (zipWith (&&) ms) $ iterate incr $ replicate l False
-      qz = drop d $ map (take l . tobits) $ enumFrom 0
-      rz = drop d $ map (take l . tobits) $ iterate mfsr32 1
-      bz = rz
-      ms = mask l m
-      n  = 2^e
-      (bz' , xs) = calc n bz
-      (bz'', ys) = calc n bz'
+-- | Permutations for the vectors of visibilities.
+readPermutationVector :: FilePath -> IO [Int]
+readPermutationVector  = fmap (inversePermutationVector . map read . words) . readFile
 
-  printf "Synthetic visibilities data-generator (%d, %d, %d, %d):\n" l m n d
---   print xs
---   print ys
-  printf "\n\nBank 0:\n"
-  dump xs
-  printf "\n\nBank 1:\n"
-  dump ys
+inversePermutationVector :: [Int] -> [Int]
+inversePermutationVector ps = runST do
+  let n = length ps
+  ar <- Mut.new n
+  let go _    []  = pure ()
+      go i (j:js) = Mut.write ar j i >> go (i+1) js
+  go 0 ps
+  Vec.toList <$> Vec.freeze ar
