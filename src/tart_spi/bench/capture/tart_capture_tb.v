@@ -174,7 +174,7 @@ module tart_capture_tb;
 
    initial begin : CAP_TB
       if (LIMIT < 6) begin
-         $dumpfile ("../vcd/cap_tb.vcd");
+         $dumpfile ("vcd/cap_tb.vcd");
          $dumpvars;
       end
 

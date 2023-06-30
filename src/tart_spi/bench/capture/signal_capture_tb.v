@@ -79,7 +79,7 @@ module signal_capture_tb;
    //
    //-------------------------------------------------------------------------
    initial begin : SIGNAL_TB
-      $dumpfile ("../vcd/sig_tb.vcd");
+      $dumpfile ("vcd/sig_tb.vcd");
       $dumpvars;
 
       $display("%12t: Issuing reset.", $time);
@@ -137,6 +137,7 @@ module signal_capture_tb;
    //  DEVICE UNDER TEST (DUT).
    //
    //-------------------------------------------------------------------------
+   wire [3:0] other;
    signal_capture
      #( .RATIO    (12),
         .RBITS    (4),
@@ -153,12 +154,13 @@ module signal_capture_tb;
         .cycle_i  (cycle),
         .drift_i  (drift),
         .ready_o  (ready),
+        .phase_o  (other),
         .locked_o (locked),
         .invalid_o(invalid),
         .retry_i  (retry),
 
-        .signal_i(d),
-        .signal_o(q)
+        .signal_i (d),
+        .signal_o (q)
         );
 
 

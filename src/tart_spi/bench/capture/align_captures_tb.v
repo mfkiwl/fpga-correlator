@@ -131,7 +131,7 @@ module align_captures_tb;
        (
         .clock_i (clk12x),
         .reset_i (rst),
-        .enable_i(ce),
+        .align_i (ce),
         
         .data_in (cap),
         .strobes (strobes),
@@ -149,6 +149,7 @@ module align_captures_tb;
    //-------------------------------------------------------------------------
    //  Instantiate multiple signal-capture blocks.
    //-------------------------------------------------------------------------
+/*
    signal_capture
      #( .RATIO(RATIO),
         .DELAY(DELAY)
@@ -163,7 +164,7 @@ module align_captures_tb;
         .invalid_o(invalids),
         .ack_i    (acks)
         );
-
+*/
 
    //-------------------------------------------------------------------------
    // Generate fake offsets and jitter, for the given signals.

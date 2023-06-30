@@ -1,0 +1,39 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Fri Jun 30 00:40:03 2023
+[*]
+[dumpfile] "/home/patrick/git/fpga-correlator/src/wishbone/build/dualsram_tb.vcd"
+[dumpfile_mtime] "Fri Jun 30 00:36:28 2023"
+[dumpfile_size] 22088
+[savefile] "/home/patrick/git/fpga-correlator/src/wishbone/build/dualsram_tb.gtkw"
+[timestart] 0
+[size] 2560 1376
+[pos] -39 -39
+*-16.751661 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] wb_sram_dual_port_tb.
+[treeopen] wb_write.
+[sst_width] 233
+[signals_width] 102
+[sst_expanded] 1
+[sst_vpaned_height] 414
+@28
+wb_sram_dual_port_tb.clk
+wb_sram_dual_port_tb.rst
+wb_sram_dual_port_tb.cyc
+wb_sram_dual_port_tb.stb
+wb_sram_dual_port_tb.we
+@29
+wb_sram_dual_port_tb.bst
+@28
+wb_sram_dual_port_tb.ack
+@22
+wb_sram_dual_port_tb.adr[11:0]
+wb_sram_dual_port_tb.dat[7:0]
+@200
+-
+@28
+wb_sram_dual_port_tb.fin
+wb_sram_dual_port_tb.set
+wb_sram_dual_port_tb.get
+[pattern_trace] 1
+[pattern_trace] 0

@@ -57,6 +57,7 @@ module Lib
   , dump
 
   , mfsr32
+  , mfsr8
   , tobits
   , incr
   , mask
@@ -145,6 +146,12 @@ mfsr32 w = let tap0 = w .&. 0x02
                tap1 = w `shiftR` 26 .&. 0x04
                taps = tap0 .|. tap1
            in  w `rotateL` 1 `xor` taps
+
+mfsr8 :: Word8 -> Word8
+mfsr8 w = let tap0 = w .&. 0x02
+              tap1 = w `shiftR` 4 .&. 0x04
+              taps = tap0 .|. tap1
+          in  w `rotateL` 1 `xor` taps
 
 tobits :: Word32 -> [Bool]
 tobits w = let go :: Int -> Word32 -> [Bool]

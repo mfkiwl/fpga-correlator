@@ -178,7 +178,7 @@ module tart_visibilities
        
        .wr_clk_i (clk_x),
        .wr_en_i  (switch_x),
-       .wr_data_i('bx),
+       .wr_data_i(2'bx), // TODO: @patrick -- is this okay? check synth?
 
        .rst_i    (rst_i),
        .rempty_o (prefetch_empty),

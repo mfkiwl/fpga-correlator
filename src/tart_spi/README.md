@@ -46,6 +46,11 @@ Additionally, there are numerous testbenches for TART's FPGA-based subsystems, a
 
 GtkWave can be used to visualise the simulation output, and some `.gtkw` files are included, as these were used during development.
 
+Software simulation (using the Haskell code):
+```{.sh}
+> stack run -- -l 24 -m 0 -e 12 -d 2 -p data/permute.txt 
+```
+
 
 # Architecture #
 

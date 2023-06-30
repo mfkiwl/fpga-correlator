@@ -45,6 +45,7 @@ module wb_prefetch
     parameter MSB   = WIDTH-1,
     parameter COUNT = 576,      // <fetch count>
     parameter SBITS = 10,
+    parameter ABITS = SBITS,
     parameter SIZE  = 1 << SBITS,
     parameter ASB   = SBITS-1,
     parameter BSIZE = 24,

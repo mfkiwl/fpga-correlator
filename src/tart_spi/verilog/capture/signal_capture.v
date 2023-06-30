@@ -1,4 +1,7 @@
 `timescale 1ns/100ps
+//
+//  OBSOLETE !?
+//
 /*
  * Module      : verilog/capture/signal_capture.v
  * Copyright   : (C) Tim Molteno     2016

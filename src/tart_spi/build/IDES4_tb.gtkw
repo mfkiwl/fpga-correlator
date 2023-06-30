@@ -1,0 +1,45 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Fri Jun 30 06:05:23 2023
+[*]
+[dumpfile] "/home/patrick/git/fpga-correlator/src/tart_spi/build/vcd/IDES4_tb.vcd"
+[dumpfile_mtime] "Fri Jun 30 06:02:44 2023"
+[dumpfile_size] 22801
+[savefile] "/home/patrick/git/fpga-correlator/src/tart_spi/build/IDES4_tb.gtkw"
+[timestart] 0
+[size] 1920 1043
+[pos] -1 -1
+*-17.624107 445000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] IDES4_tb.
+[sst_width] 233
+[signals_width] 94
+[sst_expanded] 1
+[sst_vpaned_height] 298
+@28
+IDES4_tb.dclk
+@800200
+-Source
+@28
+IDES4_tb.fclk
+IDES4_tb.d[1:0]
+@1000200
+-Source
+@800200
+-Ctrl
+@28
+IDES4_tb.pclk
+IDES4_tb.reset
+IDES4_tb.calib
+@1000200
+-Ctrl
+@800200
+-Out
+@28
+IDES4_tb.q0[1:0]
+IDES4_tb.q1[1:0]
+IDES4_tb.q2[1:0]
+IDES4_tb.q3[1:0]
+@1000200
+-Out
+[pattern_trace] 1
+[pattern_trace] 0

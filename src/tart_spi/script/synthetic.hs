@@ -1,9 +1,6 @@
 #!/usr/bin/env runhaskell
-{-# LANGUAGE DeriveFoldable    #-}
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE DeriveTraversable #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TypeOperators     #-}
+{-# LANGUAGE DeriveFoldable, DeriveFunctor, DeriveTraversable,
+             OverloadedStrings, TypeOperators #-}
 
 ------------------------------------------------------------------------------
 -- |
@@ -147,8 +144,6 @@ main  = do
       (bz'', ys) = calc n bz'
 
   printf "Synthetic visibilities data-generator (%d, %d, %d, %d):\n" l m n d
---   print xs
---   print ys
   printf "\n\nBank 0:\n"
   dump xs
   printf "\n\nBank 1:\n"
