@@ -52,8 +52,8 @@
  * 
  */
 
-module correlator_block
-  #(//  Data and visibilities parameters:
+module correlator_block #(
+    //  Data and visibilities parameters:
     parameter ACCUM = 24,      // Accumulator bit-widths
     parameter MSB   = ACCUM-1,
     parameter IBITS = 24,      // Number of data sources
@@ -94,8 +94,8 @@ module correlator_block
     parameter JSB   = JBITS-1,     // MSB of external address
 
     //  Simulation-only parameters:
-    parameter DELAY = 3)
-   (
+    parameter DELAY = 3
+) (
     input          clk_x, // correlator clock
     input          rst_x,
     input          clk_i, // SRAM/bus clock
@@ -112,45 +112,45 @@ module correlator_block
     input          sram_ce_i,
     input [JSB:0]  sram_ad_i,
     output [MSB:0] sram_do_o    // NOTE: 2 cycles of read latency
-    );
+);
 
 
-   wire [TSB:0]    x_rd_adr, x_wr_adr, y_rd_adr, y_wr_adr;
-   wire [XSB:0]    bank_adr;
-   wire            sw, en;
-   wire [ISB:0]    re, im;
-   wire [MSB:0]    sram_do_d, sram_do_s;
+    wire [TSB:0]    x_rd_adr, x_wr_adr, y_rd_adr, y_wr_adr;
+    wire [XSB:0]    bank_adr;
+    wire            sw, en;
+    wire [ISB:0]    re, im;
+    wire [MSB:0]    sram_do_d, sram_do_s;
 
 
-   //-------------------------------------------------------------------------
-   //  Assign outputs depending on the given parameters.
-   //-------------------------------------------------------------------------
-   assign sram_do_o = CARRY ? sram_do_s : sram_do_d;
-   assign bank_o = bank_adr;
+    //-------------------------------------------------------------------------
+    //  Assign outputs depending on the given parameters.
+    //-------------------------------------------------------------------------
+    assign sram_do_o = CARRY ? sram_do_s : sram_do_d;
+    assign bank_o = bank_adr;
 
 
-   //-------------------------------------------------------------------------
-   //  Local synchronous reset for the correlator controllers.
-   //-------------------------------------------------------------------------
-   (* NOMERGE *) reg rst_ctrl = 1'b1;
+    //-------------------------------------------------------------------------
+    //  Local synchronous reset for the correlator controllers.
+    //-------------------------------------------------------------------------
+    (* NOMERGE *) reg rst_ctrl = 1'b1;
 
-   always @(posedge clk_x)
-     rst_ctrl <= #DELAY rst_x;
+    always @(posedge clk_x)
+        rst_ctrl <= #DELAY rst_x;
 
 
-   //-------------------------------------------------------------------------
-   //  Correlator (block) control unit.
-   //-------------------------------------------------------------------------
-   control
-     #( .IBITS(IBITS),
+    //-------------------------------------------------------------------------
+    //  Correlator (block) control unit.
+    //-------------------------------------------------------------------------
+    control #(
+        .IBITS(IBITS),
         .TICKS(TICKS),
         .SLOW (SLOW),
         .DUPS (DUPS),
         .TRATE(TRATE),
         .TBITS(TBITS),
         .DELAY(DELAY)
-        ) CTRL
-       (.clk_x     (clk_x), // correlator clock
+    ) CTRL (
+        .clk_x     (clk_x), // correlator clock
         .rst       (rst_ctrl),
         .sw_i      (sw_i), // switch banks
         .en_i      (en_i), // data is valid
@@ -165,14 +165,14 @@ module correlator_block
         .en_o      (en),
         .real_o    (re),
         .imag_o    (im)
-        );
+    );
 
 
-   //-------------------------------------------------------------------------
-   //  Block of four DSP48A2-based correlators.
-   //-------------------------------------------------------------------------
-   block_DSP
-     #( .ACCUM(ACCUM),          // Accumulator bit-widths
+    //-------------------------------------------------------------------------
+    //  Block of four DSP48A2-based correlators.
+    //-------------------------------------------------------------------------
+    block_DSP #(
+        .ACCUM(ACCUM),          // Accumulator bit-widths
         .IBITS(IBITS),          // Number of data sources
         .PAIRS0(PAIRS0),
         .PAIRS1(PAIRS1),
@@ -186,8 +186,7 @@ module correlator_block
         .NSRAM(NSRAM),         // #<block SRAM> for read-back
         .ABITS(ABITS),         // External I/O address bits
         .DELAY(DELAY)
-        ) BDSP
-       (
+    ) BDSP (
         .clk_x(CARRY ? 1'b0 : clk_x),
 
         .x_rd_adr_i(CARRY ? {TBITS{1'b0}} : x_rd_adr),
@@ -205,14 +204,14 @@ module correlator_block
         .sram_ce_i(CARRY ? 1'b0 : sram_ce_i),
         .sram_ad_i(CARRY ? {JBITS{1'b0}} : sram_ad_i),
         .sram_do_o(sram_do_d)
-        );
+    );
 
 
-   //-------------------------------------------------------------------------
-   //  Block of four carry-chain-based correlators.
-   //-------------------------------------------------------------------------
-   block_SDP
-     #( .ACCUM(ACCUM),          // Accumulator bit-widths
+    //-------------------------------------------------------------------------
+    //  Block of four carry-chain-based correlators.
+    //-------------------------------------------------------------------------
+    block_SDP #(
+        .ACCUM(ACCUM),          // Accumulator bit-widths
         .IBITS(IBITS),          // Number of data sources
         .PAIRS0(PAIRS0),
         .PAIRS1(PAIRS1),
@@ -226,8 +225,7 @@ module correlator_block
         .NSRAM(NSRAM),         // #<block SRAM> for read-back
         .ABITS(ABITS),         // External I/O address bits
         .DELAY(DELAY)
-        ) BSDP
-       (
+    ) BSDP (
         .clk_x(CARRY ? clk_x : 1'b0),
 
         .x_rd_adr_i(CARRY ? x_rd_adr : {TBITS{1'b0}}),
@@ -245,7 +243,7 @@ module correlator_block
         .sram_ce_i(CARRY ? sram_ce_i : 1'b0),
         .sram_ad_i(CARRY ? sram_ad_i : {JBITS{1'b0}}),
         .sram_do_o(sram_do_s)
-        );
+    );
 
 
 endmodule // correlator_block
