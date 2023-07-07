@@ -152,31 +152,33 @@ module tart_dsp_tb;
    reg [XSB:0]  viz_bank = {XBITS{1'b0}};
 
 
-   //-------------------------------------------------------------------------
-   //
-   //  TIMEOUT.
-   //
-   //-------------------------------------------------------------------------
-   //  Exit if the simulation appears to have stalled.
-   parameter LIMIT = 1000 + (1 << COUNT) * 320 + NREAD * 80;
-//    parameter LIMIT = 2000;
+    //-------------------------------------------------------------------------
+    //
+    //  TIMEOUT.
+    //
+    //-------------------------------------------------------------------------
+    //  Exit if the simulation appears to have stalled.
+    localparam LIMIT = 1000 + (1 << COUNT) * 320 + XFER_COR_TO_OUT * 2;
+    localparam XFER_COR_TO_SPI_BUF = NREAD * 12;
+    localparam XFER_SPI_BUF_TO_OUT = BREAD * 10;
+    localparam XFER_COR_TO_OUT = XFER_COR_TO_SPI_BUF + XFER_SPI_BUF_TO_OUT;
 
-   initial begin : SIM_FAILED
-      $display("%12t: Simulation TIMEOUT limit:\t%12d", $time, LIMIT);
-      #LIMIT $display ("\nTIMEOUT!\n");
-      $finish;
-   end // SIM_FAILED
+    initial begin : SIM_FAILED
+        $display("%12t: Simulation TIMEOUT limit:\t%12d", $time, LIMIT);
+        #LIMIT $display ("\nTIMEOUT!\n");
+        $finish;
+    end // SIM_FAILED
 
 
-   //-------------------------------------------------------------------------
-   //
-   //  SIMULATION STIMULI.
-   //
-   //-------------------------------------------------------------------------
-   //  Setup correlator and bus clocks, respectively.
-   always #`CLK_X  clk_x <= ~clk_x;
-   always #`CLK_B  b_clk <= ~b_clk;
-   always #`CLK_E  clk_e <= ~clk_e;
+    //-------------------------------------------------------------------------
+    //
+    //  SIMULATION STIMULI.
+    //
+    //-------------------------------------------------------------------------
+    //  Setup correlator and bus clocks, respectively.
+    always #`CLK_X  clk_x <= ~clk_x;
+    always #`CLK_B  b_clk <= ~b_clk;
+    always #`CLK_E  clk_e <= ~clk_e;
 
 
    //-------------------------------------------------------------------------
@@ -198,7 +200,7 @@ module tart_dsp_tb;
    // integer       fh;
 
    initial begin : SIM_BLOCK
-      if (COUNT < 8) begin
+      if (COUNT < 11) begin
          $write("%12t: ", $time);
          $dumpfile("vcd/dsp_tb.vcd");
          $dumpvars;

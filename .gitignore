@@ -1,5 +1,7 @@
 *.out
 *.vcd
+target
+*.lock
 
 .stack-work
 *.cabal
